@@ -25,6 +25,12 @@ Tarih: 1 Kasım 2026. Ortam: Windows, Node.js 24.15.0, Playwright 1.64.1, Chromi
 
 ## Kontrolün sınırları
 
+### 1.0.3 eski dosya adresi ve beyaz ekran kurtarması
+
+Kullanıcının gerçek Chrome sekmesinde boş `#root` ve `assets/index-DUBs5tBM.js` çağrısı görüldü. Bu dosyanın canlı sunucuda 404 döndüğü doğrulandı. Yeni sürümlerde giriş dosyası `assets/app.js`, dinamik parça ve stil adresleri de sabit kalır. Daha önce yayımlanmış dosya adresleri, ilerlemeyi silmeden güncel service worker’ı etkinleştiren küçük kurtarma girişlerine yönlendirilir. Açılış durumu React başlamadan görünür; dosya yüklenemediğinde boş ekran yerine kurtarma ve yeniden deneme alanı vardır. Kurtarma en fazla iki otomatik deneme yapar; `localStorage` silinmez.
+
+Gerçek hata, testte önce silinmiş JavaScript dosyasına bakan eski HTML’yi bir service worker önbelleğine kurarak üretildi. Yeni dağıtımdan sonra sayfa hâlâ o eski HTML’yi alırken kurtarma girişi uygulamayı açtı ve yazılı ödev kaydını korudu. İkinci testte güncel giriş dosyasının ilk isteği 404 yapıldı ve uygulamanın kendiliğinden açıldığı görüldü. İki test de Chrome ve mobil WebKit için çalışır; toplam tarayıcı testi 114’tür.
+
 ### 1.0.2 HTTP önbelleği düzeltmesi
 
 Canlı 1.0.0 → 1.0.1 geçiş testi, yeni service worker etkinleşmesine rağmen önbelleğe eski HTML’nin konabildiğini gösterdi. Test sunucusu GitHub Pages gibi `Cache-Control: public, max-age=600` başlığıyla çalışacak şekilde değiştirildi; eski kodda ilk sekme bile yeni sürüm işaretine geçemedi. Kurulumdaki tüm statik dosya istekleri artık `cache: reload` ile HTTP önbelleğini yeniden doğruluyor. Service worker üretim kodu da önbellek sürümünün hash hesabına katılıyor; yalnızca önbellek algoritması değişse bile ayrı bir sürüm oluşuyor. İki sekmeli geçiş, hata/yeniden deneme ve ilerleme koruma testleri Chrome ve mobil WebKit’te bu önbellek başlıklarıyla geçti.

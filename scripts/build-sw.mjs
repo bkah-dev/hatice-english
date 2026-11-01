@@ -1,5 +1,9 @@
-import {readdir,readFile,writeFile} from 'node:fs/promises';
+import {mkdir,readdir,readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
+const legacy=JSON.parse(await readFile('scripts/legacy-entries.json','utf8'));
+await mkdir('dist/assets',{recursive:true});
+for(const file of legacy.scripts)await writeFile(`dist/assets/${file}`,`import '../recovery.js';\nwindow.dispatchEvent(new Event('hatice:recover'));\n`);
+for(const file of legacy.styles)await writeFile(`dist/assets/${file}`,`@import url('./index.css');\n`);
 async function list(dir){const result=[];for(const e of await readdir(dir,{withFileTypes:true})){if(e.isDirectory())result.push(...(await list(`${dir}/${e.name}`)));else if(e.name!=='sw.js')result.push(`${dir}/${e.name}`);}return result;}
 const files=(await list('dist')).sort();
 const hash=createHash('sha256');for(const file of files)hash.update(await readFile(file));

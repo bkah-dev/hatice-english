@@ -25,6 +25,8 @@ npm run preview
 
 `build` önce bütün dersleri doğrular, TypeScript kontrolünü yapar, sonra üretim dosyalarını ve sürümlü çevrimdışı önbelleği oluşturur. GitHub Pages tabanı `/hatice-english/`; yönlendirme hash üzerinden olduğundan ders bağlantıları yenilendiğinde 404 oluşmaz.
 
+Giriş dosyası adresi sürümler arasında `assets/app.js` olarak sabittir. Önceki sürümlerin dosya adresleri `scripts/legacy-entries.json` üzerinden kurtarma girişleri olarak yayımlanır. Bu uyumluluk dosyalarını kaldırmayın: eski HTML hâlâ bir cihazda saklanıyor olabilir. Açılış kurtarması `public/recovery.js` içindedir ve ilerlemeyi temizlemez.
+
 ## Hazır kapsam
 
 - 16 tam bireysel ders: 32 özgün 6 sıralı diyalog, 80 anlama sorusu, 64 cümle üretimi, 48 konuşma görevi ve somut ödevler.
