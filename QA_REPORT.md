@@ -6,7 +6,7 @@ Tarih: 1 Kasım 2026. Ortam: Windows, Node.js 24.15.0, Playwright 1.64.1, Chromi
 
 - `npm run build`: 28 günün içerik doğrulaması, TypeScript ve Vite üretim derlemesi başarılı. 16 bireysel ders, 8 partner dersi, 4 haftalık tekrar; 32 ayrı özgün diyalog, 80 anlama sorusu, 64 üretim etkinliği ve 48 konuşma görevi.
 - `npm run test:unit`: 3 test başarılı. Eksik diyalog, geçersiz cevap anahtarı, boş ödev ve bozuk tekrar bağlantısı gerçekten reddediliyor. Bozuk yedek yapısı reddediliyor. Tekrar aralıkları doğru büyüyor ve unutulunca sıfırlanıyor.
-- `npm test`: iki tarayıcıda toplam 24 senaryo başarılı. Her senaryo kendi içindeki bütün gün/diyalog/öğretmen planlarını dolaşıyor.
+- `npm test`: iki tarayıcıda 108 senaryo. Her günün bütün adımları ve her bireysel dersin iki diyaloğu ayrı bir test olarak çalışıyor; ayrıca uçtan uca ilerleme, yedek, ses hata/iptal, öğretmen, erişilebilirlik ve çevrimdışı senaryoları var. İlk yerel turdaki 24 toplu senaryo başarılıydı. Daha yavaş Linux CI koşucusunda toplu taramaların toplam süre sınırına takılması üzerine aynı kapsam gün/ders başına ayrıldı.
 - Bağımlılık kurulumundan sonraki npm taraması: 0 bilinen açık. Gereksiz PWA bağımlılıkları kaldırıldı; önbellek uygulamanın statik dosyalarıyla sınırlı özel service worker ile kuruluyor.
 
 ## Tarayıcı senaryoları

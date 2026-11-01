@@ -14,21 +14,16 @@ test.beforeEach(async({page})=>{
   });
 });
 
-test('all 28 days open, with every lesson stage and no horizontal overflow',async({page})=>{
-  test.setTimeout(90000);
+for(const l of lessons)test(`day ${l.id}: all stages open without horizontal overflow`,async({page})=>{
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
-  for(const l of lessons){
     await page.goto(`#/lesson/${l.id}`);
     await expect(page.getByRole('heading',{name:l.title,exact:true})).toBeVisible();
     if(l.kind!=='partner')for(const label of ['Dinle','Anla','Cümle kur','Konuş','Günün çıktısı']){await page.getByRole('navigation',{name:'Ders adımları'}).getByRole('button',{name:label,exact:false}).click();await expect(page.locator('.lesson-panel')).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);}
     else expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
-  }
   expect(errors).toEqual([]);
 });
 
-test('all 32 solo listening dialogues support normal, slow, sentence replay, transcript and stop without labels',async({page})=>{
-  test.setTimeout(90000);
-  for(const l of soloLessons){
+for(const l of soloLessons)test(`listening ${l.id}: both dialogues support normal, slow, sentence, transcript and stop without labels`,async({page})=>{
     await page.goto(`#/lesson/${l.id}`);await page.getByRole('navigation',{name:'Ders adımları'}).getByRole('button',{name:'Dinle'}).click();
     for(let i=0;i<2;i++){
       const panel=page.locator('.audio-panel').nth(i);await expect(panel.locator('.transcript')).toHaveCount(0);
@@ -39,7 +34,6 @@ test('all 32 solo listening dialogues support normal, slow, sentence replay, tra
       await panel.getByRole('button',{name:'1. cümleyi dinle',exact:true}).click();await page.getByRole('button',{name:'Sesi durdur',exact:true}).click();
       await panel.getByRole('button',{name:'Metni gizle',exact:true}).click();await expect(panel.locator('.transcript')).toHaveCount(0);
     }
-  }
   const played=await page.evaluate(()=>(window as unknown as {__audio:{played:string[]}}).__audio.played);expect(played.length).toBeGreaterThan(0);expect(played.some(s=>/^(A:|B:|Alex:|Mia:)/.test(s))).toBe(false);
 });
 
@@ -115,4 +109,3 @@ test('core pages pass automated WCAG AA accessibility checks in both themes',asy
   }
   await page.getByRole('button',{name:'Koyu temaya geç',exact:true}).first().click();const dark=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect(dark.violations).toEqual([]);
 });
-
