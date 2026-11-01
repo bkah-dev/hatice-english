@@ -23,9 +23,10 @@ for(const l of lessons)test(`day ${l.id}: all stages open without horizontal ove
   expect(errors).toEqual([]);
 });
 
-for(const l of soloLessons)test(`listening ${l.id}: both dialogues support normal, slow, sentence, transcript and stop without labels`,async({page})=>{
+for(const l of soloLessons)test(`listening ${l.id}: all dialogues support normal, slow, sentence, transcript and stop without labels`,async({page})=>{
+    test.setTimeout(60_000);
     await page.goto(`#/lesson/${l.id}`);await page.getByRole('navigation',{name:'Ders adımları'}).getByRole('button',{name:'Dinle'}).click();
-    for(let i=0;i<2;i++){
+    for(let i=0;i<l.dialogues.length;i++){
       const panel=page.locator('.audio-panel').nth(i);await expect(panel.locator('.transcript')).toHaveCount(0);
       await panel.getByRole('button',{name:'Normal dinle',exact:true}).click();await expect(panel.getByRole('checkbox')).toBeChecked();
       await panel.getByRole('button',{name:'Yavaş dinle',exact:true}).click();await expect(page.getByText('Dinleme tamamlandı.',{exact:true})).toBeVisible();
@@ -41,6 +42,7 @@ for(const l of soloLessons)test(`listening ${l.id}: both dialogues support norma
 });
 
 test('full lesson flow saves drafts, feedback, review and completion after reload',async({page})=>{
+  test.setTimeout(60_000);
   const l=soloLessons[0];await page.goto('#/lesson/w1-d1');
   for(const b of await page.getByRole('button',{name:'Deneyip kendi cümlemi söyledim'}).all())await b.click();
   await page.getByRole('button',{name:'Sonraki adım',exact:true}).click();
@@ -49,7 +51,7 @@ test('full lesson flow saves drafts, feedback, review and completion after reloa
   await page.locator('fieldset').first().getByRole('button',{name:l.comprehensionQuestions[0].options[0],exact:true}).click();await expect(page.getByText('Birlikte ilgili cümleye dönelim.',{exact:true})).toBeVisible();
   for(let i=0;i<l.comprehensionQuestions.length;i++)await page.locator('fieldset').nth(i).getByRole('button',{name:l.comprehensionQuestions[i].options[l.comprehensionQuestions[i].answer],exact:true}).click();
   await page.getByRole('button',{name:'Sonraki adım',exact:true}).click();
-  for(let i=0;i<4;i++){const card=page.locator('.exercise-card').nth(i);await card.getByRole('textbox').fill(l.sentenceExercises[i].answer);await card.getByRole('button',{name:'Cevabımı karşılaştır',exact:true}).click();await card.getByRole('checkbox').check();}
+  for(let i=0;i<l.sentenceExercises.length;i++){const card=page.locator('.exercise-card').nth(i);await card.getByRole('textbox').fill(l.sentenceExercises[i].answer);await card.getByRole('button',{name:'Cevabımı karşılaştır',exact:true}).click();await card.getByRole('checkbox').check();}
   await page.getByRole('button',{name:'Sonraki adım',exact:true}).click();
   for(const c of await page.getByRole('checkbox').all())await c.check();
   await page.getByRole('button',{name:'Sonraki adım',exact:true}).click();

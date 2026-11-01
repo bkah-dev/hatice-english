@@ -9,6 +9,8 @@ test('content validator rejects missing dialogue, answer key, homework and broke
 });
 test('backup accepts actual progress and rejects malformed nested structures',()=>{
   const progress=freshProgress();progress.lessons['w1-d1']=freshLesson();assert(validProgress(progress));
+  progress.lessons['w1-d1'].listened=[0,1,2,3,4,5];progress.lessons['w1-d1'].drafts.ex7='A saved answer from the expanded lesson.';assert(validProgress(JSON.parse(JSON.stringify(progress))));
+  assert.equal(validProgress({...progress,lessons:{'w1-d1':{...freshLesson(),listened:[6]}}}),false);
   for(const bad of [null,{}, {...progress,version:2},{...progress,lessons:{'w1-d1':null}},{...progress,review:[{}]},{...progress,notes:[{text:123}]},{...progress,lessons:{'w1-d1':{...freshLesson(),drafts:{homework:42}}}}])assert.equal(validProgress(bad),false);
 });
 test('spaced retrieval grows intervals and resets forgotten cards',()=>{

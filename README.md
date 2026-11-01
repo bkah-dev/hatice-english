@@ -29,9 +29,9 @@ Giriş dosyası adresi sürümler arasında `assets/app.js` olarak sabittir. Ön
 
 ## Hazır kapsam
 
-- 16 tam bireysel ders: 32 özgün 6 sıralı diyalog, 80 anlama sorusu, 64 cümle üretimi, 48 konuşma görevi ve somut ödevler.
+- 16 tam bireysel ders: 96 farklı dinleme sahnesi (92 özgün + 4 atıflı VOA uyarlaması), 272 anlama sorusu, 128 yazma/dikte etkinliği, 80 konuşma görevi ve somut ödevler.
 - 8 partner dersi ve her biri için 40 dakikalık ayrıntılı Berk rehberi.
-- 4 haftalık tekrar/değerlendirme; 8–10 dakikalık kısa sürüm.
+- 4 genişletilmiş haftalık tekrar/değerlendirme (dörder dinleme, dörder yazma); ayrı kısa çalışma yolu.
 - Normal/yavaş sentez ses, tek cümle tekrarı, metin ve Türkçe destek; iptal ve hata durumu.
 - Cihazda ilerleme/not saklama, aralıklı tekrar, JSON dışa/içe aktarma.
 - Açık/koyu tema; iPhone boyutlarında responsive arayüz; PWA manifesti ve temel offline uygulama/içerik.
@@ -46,12 +46,12 @@ Giriş dosyası adresi sürümler arasında `assets/app.js` olarak sabittir. Ön
 
 Ses, cihazın İngilizce Web Speech sentezidir. İnsan kaydı, telaffuz puanlayıcısı veya otomatik konuşma değerlendirmesi değildir. Gerçek iPhone’da ses kalitesi, mikrofon izni, sessiz mod ve offline İngilizce ses paketi ayrıca kontrol edilmelidir. Otomatik ses testleri kuyruk/düğme davranışını bir test sesiyle doğrular; duyulan sesin kalitesini doğrulamaz.
 
-29 / 40 / 18 dakika hedef tahminlerdir. Gerçek öğrenciyle süre ve zorluk pilotu yapılmamıştır. Dört hafta otomatik A2 geçişi değildir.
+Bireysel ve kısa derslerde dakika vaadi yerine gerçek görev sayıları gösterilir. Kullanıcının önceki “29 dakikalık ders yaklaşık 5 dakikada bitiyor” geri bildirimi üzerine içerik büyütüldü; yeni sürümün gerçek çalışma süresi henüz kullanıcıyla ölçülmedi. Berk dersinin 40 dakikası ayrıntılı öğretmen planıdır. Dört hafta otomatik A2 geçişi değildir.
 
 ## Yeni ders ekleme
 
 1. `src/types.ts` içindeki `Lesson` alanlarını kullan. Asıl metinleri bileşene koyma.
-2. `src/content.ts` içine özgün `Seed` ekle: 4–6 konuşma sıralı iki diyalog, dört çekirdek ifade ve kelime, 5–6 kanıtlı soru, en az dört farklı üretim, üç konuşma görevi ve sayısı belli ödev.
+2. `src/content.ts` ve `src/practice.ts` içine özgün `Seed` ekle: 4–6 konuşma sıralı iki diyalog, dört çekirdek ifade ve kelime, 5–6 kanıtlı soru, en az dört farklı üretim, üç konuşma görevi ve sayısı belli ödev.
 3. Sorunun `dialogue` indeksi ve `evidence` cümlesi birebir ilgili diyalogla eşleşmeli. `reviewPhrase` var olan çekirdek ifadeyi göstermeli.
 4. `src/teacher.ts` içinde yeni partner planını öğrenci derslerine bağla; aşamaların toplamı 40 dakika olsun. Örnek, kurtarma ipucu ve zorlaştırmadan genişletme sorusu ekle.
 5. `src/curriculum.ts` içinde hafta haritası ve haftalık tekrarı düzenle. Takvim ve doğrulayıcıdaki mevcut 4 hafta sınırını yeni kapsama bilinçli olarak genişlet. Yedek şemasında sürüm geçişini planla.

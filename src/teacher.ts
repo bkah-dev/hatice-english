@@ -32,7 +32,7 @@ export const teacherPlans: TeacherPlan[] = workshops.map(w => {
 
 export const partnerLessons:Lesson[]=workshops.map(w=>{
   const related=w.ids.map(id=>soloLessons.find(l=>l.id===id)!);
-  return {...related[0],id:`w${w.week}-d${w.day}`,day:w.day,kind:'partner',title:w.title,subtitle:'Berk ile konuşma · birlikte 40 dakika',estimatedDuration:40,
+  return {...related[0],id:`w${w.week}-d${w.day}`,day:w.day,kind:'partner',title:w.title,subtitle:'Berk ile konuşma · birlikte 40 dakika',teacherPlanMinutes:40,
     learningObjectives:w.assessment,corePhrases:related.flatMap(l=>l.corePhrases).slice(0,6),
     dialogues:related.map(l=>l.dialogues[0]),comprehensionQuestions:related[0].comprehensionQuestions.filter(q=>q.dialogue===0),
     speakingTasks:w.turns.map(t=>({prompt:t,scaffold:'Önce kendi cevabını dene. Gerekirse Berk’ten tek bir ipucu iste.',success:'Bilgiyi kendi seçimimle ifade ettim.'})),

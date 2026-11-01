@@ -1,4 +1,5 @@
 import type { Dialogue, Exercise, Lesson, Phrase, Question, SpeakingTask } from './types';
+import {expandLesson} from './practice';
 
 const pairs = (text: string): Phrase[] => text.split('\n').map(l => { const [en, tr] = l.split('|'); return { en, tr }; });
 const dialogue = (title: string, gist: string, text: string): Dialogue => ({ title, gist, lines: pairs(text).map((p, i) => ({ speaker: i % 2 ? 'Mia' : 'Alex', ...p })) });
@@ -145,7 +146,7 @@ const seeds: Seed[] = [
 
 export const weekThemes = ['Temel konuşmaları anlamak', 'Günlük ihtiyaçlar', 'Planlar ve küçük hikâyeler', 'Gerçek hayatta iletişim'];
 export const dayNames = ['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
-export const soloLessons: Lesson[] = seeds.map((s, index) => ({
+export const soloLessons: Lesson[] = seeds.map((s, index):Lesson => ({
   id: `w${s.week}-d${s.day}`, week:s.week, day:s.day, kind:'solo', level: s.week < 3 ? 'A1 · destekli' : 'A1 · adım adım', title:s.title, subtitle:s.subtitle,
   learningObjectives:[s.goal, 'Notlara bakmadan kendi cümlelerini kur; gerekince açıklama iste.'],
   corePhrases:pairs(s.phrases), vocabulary:pairs(s.vocabulary), dialogues:s.dialogues, comprehensionQuestions:s.questions, sentenceExercises:s.exercises, speakingTasks:s.speaking,
@@ -155,6 +156,6 @@ export const soloLessons: Lesson[] = seeds.map((s, index) => ({
     {lessonId:'w1-d1',phrase:1,prompt:'İşten sonra yaptığın bir şeyi notlara bakmadan İngilizce söyle.'},
     {lessonId:'w1-d1',phrase:3,prompt:'Bazen yaptığın bir hobiyi söyle; takılırsan ipucunu aç.'},
   ] : [1,2,4].map((distance,i) => {const p=seeds[Math.max(0,index-distance)]; return {lessonId:`w${p.week}-d${p.day}`,phrase:i%4,prompt: i===0?'Önceki dersten bu ifadeyi Türkçesine bakarak hatırla.':i===1?'Bir önceki konudan ifadeyi kendi hayatına uyarla.':'Daha önceki bir ifadeyle bir soru veya cevap üret.'};}),
-  estimatedDuration:29, teacherNotes:s.week===3?'Geçmiş eylem zor gelirse yalnızca stayed ve watched ile çalış. Önce tek eylem, sonra sıra. Başarıyı yeni fiil sayısıyla ölçme.':'Önce anlaşılan mesajı belirt; yalnızca anlamı etkileyen bir hatayı düzelt. İpucunu ikinci turda azalt.',
+  teacherNotes:s.week===3?'Geçmiş eylem zor gelirse yalnızca stayed ve watched ile çalış. Önce tek eylem, sonra sıra. Başarıyı yeni fiil sayısıyla ölçme.':'Önce anlaşılan mesajı belirt; yalnızca anlamı etkileyen bir hatayı düzelt. İpucunu ikinci turda azalt.',
   sources:['original','british-council-method','voa-method'], grammar:s.grammar, bonus:s.bonus,
-}));
+})).map(expandLesson);

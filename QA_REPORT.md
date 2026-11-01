@@ -4,16 +4,16 @@ Tarih: 1 Kasım 2026. Ortam: Windows, Node.js 24.15.0, Playwright 1.64.1, Chromi
 
 ## Otomatik kontroller
 
-- `npm run build`: 28 günün içerik doğrulaması, TypeScript ve Vite üretim derlemesi başarılı. 16 bireysel ders, 8 partner dersi, 4 haftalık tekrar; 32 ayrı özgün diyalog, 80 anlama sorusu, 64 üretim etkinliği ve 48 konuşma görevi.
+- `npm run build`: 28 günün içerik doğrulaması, TypeScript ve Vite üretim derlemesi başarılı. 16 bireysel ders, 8 partner dersi, 4 haftalık tekrar; 96 ayrı diyalog (92 özgün, 4 VOA uyarlaması), 272 anlama sorusu, 128 üretim/dikte etkinliği ve 80 konuşma görevi.
 - `npm run test:unit`: 3 test başarılı. Eksik diyalog, geçersiz cevap anahtarı, boş ödev ve bozuk tekrar bağlantısı gerçekten reddediliyor. Bozuk yedek yapısı reddediliyor. Tekrar aralıkları doğru büyüyor ve unutulunca sıfırlanıyor.
-- `npm test`: iki tarayıcıda 108 senaryo. Her günün bütün adımları ve her bireysel dersin iki diyaloğu ayrı bir test olarak çalışıyor; ayrıca uçtan uca ilerleme, yedek, ses hata/iptal, öğretmen, erişilebilirlik ve çevrimdışı senaryoları var. İlk yerel turdaki 24 toplu senaryo başarılıydı. Daha yavaş Linux CI koşucusunda toplu taramaların toplam süre sınırına takılması üzerine aynı kapsam gün/ders başına ayrıldı.
+- `npm test`: iki tarayıcıda 120 senaryo. Her günün bütün adımları ve her bireysel dersin altı diyaloğu ayrı bir test olarak çalışıyor; ayrıca uçtan uca ilerleme, yedek, ses hata/iptal, öğretmen, erişilebilirlik ve çevrimdışı senaryoları var. İlk yerel turdaki 24 toplu senaryo başarılıydı. Daha yavaş Linux CI koşucusunda toplu taramaların toplam süre sınırına takılması üzerine aynı kapsam gün/ders başına ayrıldı.
 - Bağımlılık kurulumundan sonraki npm taraması: 0 bilinen açık. Gereksiz PWA bağımlılıkları kaldırıldı; önbellek uygulamanın statik dosyalarıyla sınırlı özel service worker ile kuruluyor.
 
 ## Tarayıcı senaryoları
 
 1. Bütün 28 gün ve bireysel/tekrar derslerinin tüm adımları açılıyor. Yatay taşma yok. Tarayıcı JavaScript hata listesi boş.
-2. Bütün 32 bireysel diyalogda normal/yavaş dinleme, tek cümle, metin aç/kapat, isteğe bağlı Türkçe, durdurma kontrol ediliyor. Ses kuyruğuna konuşmacı etiketi gitmiyor.
-3. İlk bireysel ders baştan sona çalışılıyor: notsuz hatırlama, dinleme, yanlış yanıt desteği, doğru cevaplar, dört üretim, üç konuşma görevi, ödev. Tamamlandı kaydı ve metin yenilemede korunuyor.
+2. Bütün 96 bireysel diyalogda normal/yavaş dinleme, tek cümle, metin aç/kapat, isteğe bağlı Türkçe, durdurma kontrol ediliyor. Ses kuyruğuna konuşmacı etiketi gitmiyor.
+3. İlk bireysel ders baştan sona çalışılıyor: notsuz hatırlama, dinleme, yanlış yanıt desteği, doğru cevaplar, sekiz üretim/dikte, beş konuşma görevi, ödev. Tamamlandı kaydı ve metin yenilemede korunuyor.
 4. Doğrudan ödev adımına atlamak tam dersi tamamlanmış yapamıyor. Kısa çalışma ayrı kaydediliyor; tam ders işareti oluşmuyor.
 5. Sekiz öğretmen planının her birindeki altı zaman bölümü ve eşleşen öğrenci diyalogları kontrol ediliyor. Veri doğrulayıcı her planın toplamının 40 dakika olduğunu denetliyor.
 6. Keşif notu ve tema yenilemede saklanıyor. JSON indiriliyor ve yeniden içe alınıyor. Geçersiz dosya mevcut kaydı değiştirmiyor.
@@ -24,6 +24,12 @@ Tarih: 1 Kasım 2026. Ortam: Windows, Node.js 24.15.0, Playwright 1.64.1, Chromi
 11. Masaüstü ve mobil ekran görüntüleri gözle incelendi. SVG kahve çizimi ve responsive yerleşim, uygulamanın kendi kodudur; dış görsel ağı yok.
 
 ## Kontrolün sınırları
+
+### 1.1.0 içerik genişlemesi
+
+16 bireysel günün her biri 6 sahne, 17 soru, 8 yazma/dikte ve 5 konuşma görevi içerir. Haftalık tekrarlar 4 sahne ve 4 üretim etkinliğine genişletildi. Doğrulayıcı her bireysel dersin en az 320 İngilizce dinleme kelimesi, her sahnenin en az iki sorusu, yeterli örnek yanıt uzunluğu ve kaynak atfı olduğunu denetler. Dört VOA uyarlamasında kaynak ve hak bağlantıları karttan açılır.
+
+Ek tarayıcı senaryoları: eski tamamlanma/ödev korunurken yeni içerik uyarısı; altı dinleme kaydının yenileme ve yedekte korunması; dikte yanıtının karşılaştırmaya kadar gizlenmesi; bir kelimelik yanıtla çok bilgili yazma görevinin geçilememesi; yanıt değiştirilince öz kontrolün sıfırlanması; kaynak kartı ve haftalık tekrarın dört sahnesi. Eski soru, taslak ve dinleme indisleri korunur; yerel depolama temizlenmez.
 
 ### 1.0.4 bağımsız Türkçe dinleme desteği
 
@@ -46,7 +52,7 @@ Canlı 1.0.0 → 1.0.1 geçiş testi, yeni service worker etkinleşmesine rağme
 - Otomatik ses testlerinde sentez arayüzü test sesiyle taklit edilir. Kuyruk, etiketler ve düğmeler doğrulanır; insan kulağıyla sesin doğallığı veya fiziksel iPhone hoparlörü doğrulanmaz.
 - iPhone Safari/Chrome’da gerçek sentez, mikrofon izni, indirilen ses dosyası, ana ekrana ekleme ve işletim sistemi çevrimdışı ses paketi Hatice’nin telefonunda ayrıca denenmelidir.
 - Mikrofon izni reddi ve destek yokluğu test edildi. Gerçek mikrofonla kayıt kalitesi değerlendirilmedi. Kayıtlar sunucuya gönderilmez ve indirilmeyen kayıt ekrandan ayrılınca kaybolur; bu durum arayüzde yazılıdır.
-- 29/40/18 ve 8–10 dakika tahmindir. Hatice ile gerçek öğrenme süresi, yorgunluk, anlaşılırlık ve görev zorluğu pilotu yapılmadı. Sayısal içerik hedefinin tutması bu süreyi kanıtlamaz.
+- Kullanıcının önceki 29 dakika etiketine karşı yaklaşık 5 dakika geri bildirimi nedeniyle bireysel, tekrar ve kısa çalışma dakika iddiaları kaldırıldı. Yeni sürüm için gerçek öğrenme süresi ve dinleme zorluğu kullanıcıyla ölçülmedi. İçerik miktarının artması tek başına belirli bir çalışma süresini kanıtlamaz.
 - Konuşma ve kişisel cümleler otomatik dil modeliyle puanlanmaz. Model cevap + öz değerlendirme ve Berk dönütü vardır. Son soru cevapları destek sonrasını içerebilir; bağımsız ölçme sınavı değildir.
 - Harici kaynakların resmi adresleri araştırmada açıldı. YouTube/Google bağlantıları doğru kodlanmış arama URL’leridir; sonuçların seviyesi ve erişilebilirliği zamanla değişebilir.
 - Otomatik erişilebilirlik kontrolü insan ekran okuyucu ve gerçek klavye kullanımının tam eşdeğeri değildir. Yerel HTML semantiği, etiketler, odak işareti ve dokunma hedefleri ayrıca uygulandı.

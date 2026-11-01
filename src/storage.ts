@@ -18,7 +18,7 @@ export function validProgress(value:unknown):value is Progress {
       &&dict(l.answers)&&Object.values(l.answers).every(n=>Number.isInteger(n)&&n>=0&&n<6)
       &&dict(l.drafts)&&Object.values(l.drafts).every(s=>typeof s==='string'&&s.length<=20000)
       &&dict(l.checks)&&Object.values(l.checks).every(v=>typeof v==='boolean')
-      &&Array.isArray(l.listened)&&l.listened.every(n=>n===0||n===1)
+      &&Array.isArray(l.listened)&&l.listened.every(n=>Number.isInteger(n)&&n>=0&&n<6)
       &&(!l.full||typeof l.full==='string')&&(!l.short||typeof l.short==='string');
   }))return false;
   return p.review.every(c=>dict(c)&&typeof c.id==='string'&&/^w[1-4]-d[1-7]$/.test(c.lessonId)&&Number.isInteger(c.phrase)&&c.phrase>=0&&c.phrase<8&&date(c.due)&&[c.interval,c.successes].every(n=>Number.isInteger(n)&&n>=0&&n<10000))&&p.notes.every(n=>dict(n)&&typeof n.id==='string'&&typeof n.text==='string'&&n.text.length<=10000&&typeof n.created==='string');
