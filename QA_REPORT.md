@@ -25,6 +25,10 @@ Tarih: 1 Kasım 2026. Ortam: Windows, Node.js 24.15.0, Playwright 1.64.1, Chromi
 
 ## Kontrolün sınırları
 
+### 1.0.2 HTTP önbelleği düzeltmesi
+
+Canlı 1.0.0 → 1.0.1 geçiş testi, yeni service worker etkinleşmesine rağmen önbelleğe eski HTML’nin konabildiğini gösterdi. Test sunucusu GitHub Pages gibi `Cache-Control: public, max-age=600` başlığıyla çalışacak şekilde değiştirildi; eski kodda ilk sekme bile yeni sürüm işaretine geçemedi. Kurulumdaki tüm statik dosya istekleri artık `cache: reload` ile HTTP önbelleğini yeniden doğruluyor. Service worker üretim kodu da önbellek sürümünün hash hesabına katılıyor; yalnızca önbellek algoritması değişse bile ayrı bir sürüm oluşuyor. İki sekmeli geçiş, hata/yeniden deneme ve ilerleme koruma testleri Chrome ve mobil WebKit’te bu önbellek başlıklarıyla geçti.
+
 ### 1.0.1 güncelleme düzeltmesi
 
 İki açık sekmeyle gerçek service worker güncellemesi test edildi. Önceki sürümde birinci sekme yeni sürümü etkinleştirince ikinci sekmedeki bildirim kalıyor, düğme `registration.waiting` boş olduğu için hiçbir şey yapmıyordu. Test bu hatayı eski kodda yeniden üretti. Yeni sürüm diğer sekmede etkinleşmiş güncellemeyi izler; kullanıcının güncelle düğmesi yeni sayfayı açar. Sekmeler kendiliğinden yeniden yüklenmez; indirilmemiş ses kayıtları için kullanıcı kontrolü korunur. Gönderim hatası enjekte edilerek hata metni, yeniden deneme ve ardından başarılı güncelleme de sınandı. İlerleme kaydı iki sekmede de korunur. Bu test Chrome ve mobil WebKit için iki ek senaryo getirir (toplam 110 tarayıcı testi).

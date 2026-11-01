@@ -12,8 +12,9 @@ test('an update activated in one tab can also refresh the stale notice in anothe
       const pathname=new URL(req.url!,'http://localhost').pathname;
       const relative=pathname.replace(/^\/hatice-english\//,'')||'index.html';
       if(relative.includes('..')){res.writeHead(403).end();return;}
-      res.setHeader('Cache-Control','no-store');
+      res.setHeader('Cache-Control','public, max-age=600');
       if(relative==='sw.js'){
+        res.setHeader('Cache-Control','no-cache');
         res.setHeader('Content-Type','application/javascript');
         res.end(sw.replace(/const CACHE='[^']+'/,`const CACHE='hatice-english-update-test-${version}'`));return;
       }
