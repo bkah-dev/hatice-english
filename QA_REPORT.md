@@ -25,6 +25,10 @@ Tarih: 1 Kasım 2026. Ortam: Windows, Node.js 24.15.0, Playwright 1.64.1, Chromi
 
 ## Kontrolün sınırları
 
+### 1.0.1 güncelleme düzeltmesi
+
+İki açık sekmeyle gerçek service worker güncellemesi test edildi. Önceki sürümde birinci sekme yeni sürümü etkinleştirince ikinci sekmedeki bildirim kalıyor, düğme `registration.waiting` boş olduğu için hiçbir şey yapmıyordu. Test bu hatayı eski kodda yeniden üretti. Yeni sürüm diğer sekmede etkinleşmiş güncellemeyi izler; kullanıcının güncelle düğmesi yeni sayfayı açar. Sekmeler kendiliğinden yeniden yüklenmez; indirilmemiş ses kayıtları için kullanıcı kontrolü korunur. Gönderim hatası enjekte edilerek hata metni, yeniden deneme ve ardından başarılı güncelleme de sınandı. İlerleme kaydı iki sekmede de korunur. Bu test Chrome ve mobil WebKit için iki ek senaryo getirir (toplam 110 tarayıcı testi).
+
 - Otomatik ses testlerinde sentez arayüzü test sesiyle taklit edilir. Kuyruk, etiketler ve düğmeler doğrulanır; insan kulağıyla sesin doğallığı veya fiziksel iPhone hoparlörü doğrulanmaz.
 - iPhone Safari/Chrome’da gerçek sentez, mikrofon izni, indirilen ses dosyası, ana ekrana ekleme ve işletim sistemi çevrimdışı ses paketi Hatice’nin telefonunda ayrıca denenmelidir.
 - Mikrofon izni reddi ve destek yokluğu test edildi. Gerçek mikrofonla kayıt kalitesi değerlendirilmedi. Kayıtlar sunucuya gönderilmez ve indirilmeyen kayıt ekrandan ayrılınca kaybolur; bu durum arayüzde yazılıdır.
