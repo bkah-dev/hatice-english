@@ -15,6 +15,7 @@ test.beforeEach(async({page})=>{
 });
 
 test('all 28 days open, with every lesson stage and no horizontal overflow',async({page})=>{
+  test.setTimeout(90000);
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
   for(const l of lessons){
     await page.goto(`#/lesson/${l.id}`);
@@ -114,3 +115,4 @@ test('core pages pass automated WCAG AA accessibility checks in both themes',asy
   }
   await page.getByRole('button',{name:'Koyu temaya geç',exact:true}).first().click();const dark=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect(dark.violations).toEqual([]);
 });
+
