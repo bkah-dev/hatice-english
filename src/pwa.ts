@@ -2,7 +2,10 @@ type Options={onNeedRefresh:()=>void;onOfflineReady:()=>void;onRegisterError:()=
 export function registerSW(options:Options){
   let registration:ServiceWorkerRegistration|undefined;
   if(!('serviceWorker'in navigator)){options.onRegisterError();return async()=>{};}
-  const ready=navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`,{scope:import.meta.env.BASE_URL}).then(reg=>{
+  const install=navigator.onLine
+    ?navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`,{scope:import.meta.env.BASE_URL})
+    :navigator.serviceWorker.getRegistration(import.meta.env.BASE_URL).then(reg=>{if(!reg)throw new Error('No offline registration');return reg;});
+  const ready=install.then(reg=>{
     registration=reg;
     if(reg.waiting)options.onNeedRefresh();
     if(reg.active)options.onOfflineReady();
