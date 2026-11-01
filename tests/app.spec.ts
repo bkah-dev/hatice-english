@@ -29,10 +29,13 @@ for(const l of soloLessons)test(`listening ${l.id}: both dialogues support norma
       const panel=page.locator('.audio-panel').nth(i);await expect(panel.locator('.transcript')).toHaveCount(0);
       await panel.getByRole('button',{name:'Normal dinle',exact:true}).click();await expect(panel.getByRole('checkbox')).toBeChecked();
       await panel.getByRole('button',{name:'Yavaş dinle',exact:true}).click();await expect(page.getByText('Dinleme tamamlandı.',{exact:true})).toBeVisible();
+      await panel.getByRole('button',{name:'Gerekirse Türkçe çeviriyi aç',exact:true}).click();await expect(panel.getByText(l.dialogues[i].lines[0].tr,{exact:true})).toBeVisible();await expect(panel.locator('.transcript p[lang="en"]')).toHaveCount(0);
+      await panel.getByRole('button',{name:'Türkçe çeviriyi gizle',exact:true}).click();await expect(panel.locator('.transcript')).toHaveCount(0);
       await panel.getByRole('button',{name:'Gerekirse metni aç'}).click();await expect(panel.locator('.transcript-line')).toHaveCount(l.dialogues[i].lines.length);
-      await panel.getByRole('button',{name:'Türkçe destek',exact:true}).click();await expect(panel.getByText(l.dialogues[i].lines[0].tr,{exact:true})).toBeVisible();
+      await panel.getByRole('button',{name:'Gerekirse Türkçe çeviriyi aç',exact:true}).click();await expect(panel.getByText(l.dialogues[i].lines[0].tr,{exact:true})).toBeVisible();
       await panel.getByRole('button',{name:'1. cümleyi dinle',exact:true}).click();await page.getByRole('button',{name:'Sesi durdur',exact:true}).click();
-      await panel.getByRole('button',{name:'Metni gizle',exact:true}).click();await expect(panel.locator('.transcript')).toHaveCount(0);
+      await panel.getByRole('button',{name:'Metni gizle',exact:true}).click();await expect(panel.locator('.transcript p[lang="en"]')).toHaveCount(0);await expect(panel.getByText(l.dialogues[i].lines[0].tr,{exact:true})).toBeVisible();
+      await panel.getByRole('button',{name:'Türkçe çeviriyi gizle',exact:true}).click();await expect(panel.locator('.transcript')).toHaveCount(0);
     }
   const played=await page.evaluate(()=>(window as unknown as {__audio:{played:string[]}}).__audio.played);expect(played.length).toBeGreaterThan(0);expect(played.some(s=>/^(A:|B:|Alex:|Mia:)/.test(s))).toBe(false);
 });

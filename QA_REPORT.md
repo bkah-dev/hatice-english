@@ -25,6 +25,10 @@ Tarih: 1 Kasım 2026. Ortam: Windows, Node.js 24.15.0, Playwright 1.64.1, Chromi
 
 ## Kontrolün sınırları
 
+### 1.0.4 bağımsız Türkçe dinleme desteği
+
+Her dinleme kartında İngilizce metin ve Türkçe çeviri ayrı düğmelerle açılır; başlangıçta ikisi de gizlidir. Dinleme testleri önce yalnızca Türkçeyi, sonra iki dili birlikte ve son olarak İngilizce kapalıyken Türkçenin açık kalmasını denetler. Ses düğmeleri her durumda yalnızca İngilizce cümleyi okur. Kurtarma testleri sürüm etiketini paket sürümünden alır; normal bir sürüm artışı eski test sabitine takılmaz.
+
 ### 1.0.3 eski dosya adresi ve beyaz ekran kurtarması
 
 Kullanıcının gerçek Chrome sekmesinde boş `#root` ve `assets/index-DUBs5tBM.js` çağrısı görüldü. Bu dosyanın canlı sunucuda 404 döndüğü doğrulandı. Yeni sürümlerde giriş dosyası `assets/app.js`, dinamik parça ve stil adresleri de sabit kalır. Daha önce yayımlanmış dosya adresleri, ilerlemeyi silmeden güncel service worker’ı etkinleştiren küçük kurtarma girişlerine yönlendirilir. Açılış durumu React başlamadan görünür; dosya yüklenemediğinde boş ekran yerine kurtarma ve yeniden deneme alanı vardır. Kurtarma en fazla iki otomatik deneme yapar; `localStorage` silinmez.

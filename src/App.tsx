@@ -75,7 +75,19 @@ function CheckRow({checked,onChange,children}:{checked:boolean;onChange:(v:boole
 
 function AudioPanel({dialogue,index,heard,onHeard,play,playing}:{dialogue:Dialogue;index:number;heard:boolean;onHeard:()=>void;play:(s:string[],slow?:boolean,done?:()=>void)=>void;playing:boolean}){
   const [text,setText]=useState(false);const [turkish,setTurkish]=useState(false);
-  return <article className="audio-panel"><span className="eyebrow">DİNLEME {index+1} · {heard?'DİNLENDİ':'ÖNCE METİNSİZ'}</span><h4>{dialogue.title}</h4><p>{dialogue.gist}</p><div className="soundwave" aria-hidden="true">{Array.from({length:40},(_,i)=><span key={i} style={{height:`${8+(Math.sin(i*1.7)+1)*17}px`}}/>)}</div><div className="button-row"><button className="btn" onClick={()=>play(dialogue.lines.map(l=>l.en),false,onHeard)}><Play size={17}/>{playing?'Baştan normal dinle':'Normal dinle'}</button><button className="btn secondary" onClick={()=>play(dialogue.lines.map(l=>l.en),true,onHeard)}>Yavaş dinle</button></div><div className="button-row"><button className="text-link" aria-expanded={text} onClick={()=>setText(v=>!v)}><BookOpen size={16}/>{text?'Metni gizle':'Gerekirse metni aç'}</button>{text&&<button className="text-link" onClick={()=>setTurkish(v=>!v)}>{turkish?'Türkçeyi gizle':'Türkçe destek'}</button>}</div>{text&&<div className="transcript">{dialogue.lines.map((l,i)=><div className="transcript-line" key={i}><span className="speaker-tag">{l.speaker}</span><div><p lang="en">{l.en}</p>{turkish&&<p className="muted small">{l.tr}</p>}</div><button className="icon-btn" aria-label={`${i+1}. cümleyi dinle`} onClick={()=>play([l.en],true)}><Volume2 size={18}/></button></div>)}</div>}<p className="small muted">Son turda metni gizle. İki ayrıntıyı kendi sözlerinle hatırla.</p><CheckRow checked={heard} onChange={v=>v&&onHeard()}>Diyaloğu dinledim veya Berk metne bakmadan dinlemem için okudu.</CheckRow></article>;
+  return <article className="audio-panel">
+    <span className="eyebrow">DİNLEME {index+1} · {heard?'DİNLENDİ':'ÖNCE METİNSİZ'}</span>
+    <h4>{dialogue.title}</h4><p>{dialogue.gist}</p>
+    <div className="soundwave" aria-hidden="true">{Array.from({length:40},(_,i)=><span key={i} style={{height:`${8+(Math.sin(i*1.7)+1)*17}px`}}/>)}</div>
+    <div className="button-row"><button className="btn" onClick={()=>play(dialogue.lines.map(l=>l.en),false,onHeard)}><Play size={17}/>{playing?'Baştan normal dinle':'Normal dinle'}</button><button className="btn secondary" onClick={()=>play(dialogue.lines.map(l=>l.en),true,onHeard)}>Yavaş dinle</button></div>
+    <div className="button-row">
+      <button className="text-link" aria-expanded={text} onClick={()=>setText(v=>!v)}><BookOpen size={16}/>{text?'Metni gizle':'Gerekirse metni aç'}</button>
+      <button className="text-link" aria-expanded={turkish} onClick={()=>setTurkish(v=>!v)}>{turkish?'Türkçe çeviriyi gizle':'Gerekirse Türkçe çeviriyi aç'}</button>
+    </div>
+    {(text||turkish)&&<div className="transcript">{dialogue.lines.map((l,i)=><div className="transcript-line" key={i}><span className="speaker-tag">{l.speaker}</span><div>{text&&<p lang="en">{l.en}</p>}{turkish&&<p className="muted small" lang="tr">{l.tr}</p>}</div><button className="icon-btn" aria-label={`${i+1}. cümleyi dinle`} onClick={()=>play([l.en],true)}><Volume2 size={18}/></button></div>)}</div>}
+    <p className="small muted">Önce dinle. Takılırsan anlamı kontrol et; son turda metni ve çeviriyi gizleyip yeniden dinle.</p>
+    <CheckRow checked={heard} onChange={v=>v&&onHeard()}>Diyaloğu dinledim veya Berk metne bakmadan dinlemem için okudu.</CheckRow>
+  </article>;
 }
 
 function LessonView({lesson:l,short,saved,update,addReview,toast,onDone}:{lesson:Lesson;short:boolean;saved:LessonProgress;update:(fn:(p:LessonProgress)=>LessonProgress)=>void;addReview:(id:string,phrase:number)=>void;toast:(s:string)=>void;onDone:()=>void}){

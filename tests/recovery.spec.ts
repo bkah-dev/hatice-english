@@ -4,6 +4,8 @@ import {readFile} from 'node:fs/promises';
 import {resolve,extname} from 'node:path';
 import type {AddressInfo} from 'node:net';
 import {freshProgress,freshLesson} from '../src/storage';
+import {readFileSync} from 'node:fs';
+const {version}=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8')) as {version:string};
 
 test('a stale cached HTML page with a deleted old entry recovers without clearing progress',async({context})=>{
   let deployed=false;
@@ -34,7 +36,7 @@ test('a stale cached HTML page with a deleted old entry recovers without clearin
     deployed=true;
     await page.reload();
     await expect(page.getByRole('heading',{name:/Merhaba, Hatice/})).toBeVisible({timeout:20000});
-    await expect(page.locator('footer')).toContainText('v1.0.3');
+    await expect(page.locator('footer')).toContainText(`v${version}`);
     expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('hatice-english:v1')!).lessons['w1-d1'].drafts.homework)).toBe('I usually paint after work.');
   }finally{await context.close();server.closeAllConnections();await new Promise<void>(done=>server.close(()=>done()));}
 });
@@ -44,5 +46,5 @@ test('a missing application bundle recovers automatically instead of staying whi
   await page.goto('');await expect(page.locator('#boot-status')).toBeVisible();
   await expect(page.locator('#root')).toBeEmpty();
   await expect(page.getByRole('heading',{name:/Merhaba, Hatice/})).toBeVisible({timeout:20000});
-  await expect(page.locator('footer')).toContainText('v1.0.3');
+  await expect(page.locator('footer')).toContainText(`v${version}`);
 });
